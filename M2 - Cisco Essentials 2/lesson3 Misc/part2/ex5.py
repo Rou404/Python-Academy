@@ -1,10 +1,8 @@
-import os
+import sys
 
-useri = []
-with open("user.txt", "rt") as file:
-    for line in file:
-        result = useri.append(line.replace('\n', '').split(';'))
+def suma(a,b):
+    print(a + b)
 
-filtru = list(filter(lambda user: user[1] == os.name, useri))
 
-print(filtru)
+if __name__ == "__main__":
+    suma(int(sys.argv[1]), int(sys.argv[2]))
