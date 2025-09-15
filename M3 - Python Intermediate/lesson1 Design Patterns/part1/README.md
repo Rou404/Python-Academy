@@ -10,6 +10,8 @@ design problem in your code.
 
 **Bibliography** https://refactoring.guru/design-patterns
 
+https://realpython.com/python-pass-by-reference/
+
 Patterns (each file is self-contained):
   - singleton_demo.py
   - factory_method_demo.py
