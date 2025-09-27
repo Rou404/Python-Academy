@@ -60,3 +60,6 @@ else:
 
 libc.puts(b"[cffi] hello from puts")
 
+
+
+# TODO : Implement differente sorting algorithms in python and Cython and compare performance. Use matplotlib for visualization.
