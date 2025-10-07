@@ -43,7 +43,7 @@ KEY TERMS
 - TCP vs UDP:
   - TCP gives a reliable, ordered byte stream. Great for web, APIs, file transfer.
   - UDP sends individual packets (datagrams) with low overhead. Faster but can drop or reorder.
-- DNS: translates names like "example.com" to an IP address.
+- DNS (Domain Naming System): translates names like "example.com" to an IP address.
 - Blocking vs Non‑blocking:
   - Blocking recv() waits until data arrives. Simple to understand.
   - Non‑blocking / multiplexing uses select(), selectors, or asyncio to serve many sockets efficiently.
@@ -238,7 +238,7 @@ def demo_rpc_server(host: str, port: int) -> None:
                         args = req.get("args", [])
                         if op not in FUNCTIONS:
                             raise ValueError(f"unknown op {op!r}")
-                        result = FUNCTIONS[op](*args)
+                        result = FUNCTIONS[op](*args) #FUNCTION['add'](2,3)
                         resp = {"ok": True, "result": result}
                     except Exception as e:
                         resp = {"ok": False, "error": str(e)}
