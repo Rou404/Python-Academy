@@ -71,27 +71,47 @@ def recv_line(sock: socket.socket) -> bytes:
         buf.extend(ch)
     return bytes(buf)
 
+def get_lan_ip_guess():
+    try:
+        import socket as _s
+        with _s.socket(_s.AF_INET, _s.SOCK_DGRAM) as s:
+            s.connect(("8.8.8.8", 80))
+            return s.getsockname()[0]
+    except Exception:
+        return "127.0.0.1"
+
 # ---------- Exercise 1: Client (TCP) Fibonacci ----------
 
 def student_client_tcp_fib(host: str, port: int) -> None:
-    """
-    TODO: Connect to (host, port). Read a line like: N=<int>
-          Compute fib(N) (iterative).
-          Send back "<number>\\n". Print the final server line.
-    """
-    # Your code here
-    raise NotImplementedError
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect((host, port))
+    line = recv_line(sock).decode('utf-8').strip()
+    print(f"Linie primita : {line}")
+    if line.startswith("N="):
+        a=0
+        b=1
+        n = int(line[2:])
+        for _ in range(n):
+            a, b = b, a + b
+
+        response = f"{a}\n"
+        sock.sendall(response.encode('utf-8'))
+        print(f"Sent: {a}")
+
+    sock.close()
 
 # ---------- Exercise 2: Client (UDP) affine transform (TEXT) ----------
 
 def student_client_udp_affine(host: str, port: int, x: int) -> int:
-    """
-    TODO: Create a UDP socket. Choose a random id (or 1234).
-          Send line: f"ID {id} X {x}\\n" to (host,port).
-          Receive a line: "ID <id> Y <y>". Check id matches. Return y as int.
-    """
-    # Your code here
-    raise NotImplementedError
+    myid = random.randint(1,1000)
+    message = f"ID {myid} X {x}\n".encode()
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+        s.settimeout(2)
+        s.sendto(message, (host, port))
+        data, _ = s.recvfrom(1024)
+    text = data.decode().strip().split()[-1]
+
+    return int(text)
 
 # ---------- Exercise 3: Server (TCP) WordCount (TEXT with terminator) ----------
 
@@ -107,14 +127,15 @@ def student_server_tcp_wordcount(host: str, port: int) -> None:
 # ---------- Exercise 4: Server (UDP) Simple checksum ----------
 
 def student_server_udp_checksum(host: str, port: int) -> None:
-    """
-    TODO: Bind a UDP socket. For each datagram:
-          n = len(payload); s = sum(payload) % 65536
-          Reply with ASCII line: f"LEN={n} SUM={s}\\n"
-          Handle forever (Ctrl+C to stop).
-    """
-    # Your code here
-    raise NotImplementedError
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
+        sock.bind((host, port))
+        print(f"listening on {get_lan_ip_guess()}:{port}")
+        while True:
+            data, addr = sock.recvfrom(4096)
+            n = len(data)
+            s = sum(data) % 65536
+            response = f"LEN={n} SUM={s}\n".encode()
+            sock.sendto(response, addr)
 
 # ---------- Exercise 5: Server (TCP) JSON-RPC ----------
 
