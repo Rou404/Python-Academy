@@ -116,13 +116,26 @@ def student_client_udp_affine(host: str, port: int, x: int) -> int:
 # ---------- Exercise 3: Server (TCP) WordCount (TEXT with terminator) ----------
 
 def student_server_tcp_wordcount(host: str, port: int) -> None:
-    """
-    TODO: Bind/listen. Accept ONE client, read UTF-8 lines until a line equals '---END---'.
-          Compute counts and respond with: f"words={w},lines={l},chars={c}\\n"
-          Then exit.
-    """
-    # Your code here
-    raise NotImplementedError
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        text =''
+        s.bind((host, port))
+        s.listen()
+        con, adr = s.accept()
+        while True:
+            data = con.recv(1024)
+            if not data:
+                break
+            line = data.decode().strip()
+            if line == '---END---':
+                break
+            text += line + '\n'
+        l = text.count('\n')
+        w = len(text.split())
+        c = len(text)
+        response = f"words={w},lines={l},chars={c}\n"
+        con.sendall(response.encode())
+        con.close()
+
 
 # ---------- Exercise 4: Server (UDP) Simple checksum ----------
 
@@ -140,17 +153,50 @@ def student_server_udp_checksum(host: str, port: int) -> None:
 # ---------- Exercise 5: Server (TCP) JSON-RPC ----------
 
 def student_server_tcp_rpc(host: str, port: int) -> None:
-    """
-    TODO: Bind/listen. For EACH accepted client, handle newline-delimited JSON:
-          Request forms:
-            {"op":"reverse","s":"hello"}
-            {"op":"sum","xs":[1,2,3]}
-            {"op":"uniq","xs":[1,1,2,3,3]}
-          Respond with {"ok":true,"result":...} or {"ok":false,"error":"..."} + '\\n'.
-          Handle multiple clients using threads.
-    """
-    # Your code here
-    raise NotImplementedError
+    def handle_client(conn: socket.socket, addr: tuple) -> None:
+        buf = b""
+        with conn:
+            while True:
+                chunk = conn.recv(4096)
+                if not chunk:
+                    print(f"[rpc] client {addr} disconnected")
+                    break
+                buf += chunk
+                while b"\n" in buf:
+                    line, buf = buf.split(b"\n", 1)
+                    try:
+                        request = json.loads(line.decode("utf-8"))
+                        op = request.get("op")
+                        if op == "reverse":
+                            s = request.get("s", "")
+                            result = s[::-1]
+                            response = {"ok": True, "result": result}
+                        elif op == "sum":
+                            xs = request.get("xs", [])
+                            result = sum(xs)
+                            response = {"ok": True, "result": result}
+                        elif op == "uniq":
+                            xs = request.get("xs", [])
+                            result = list(set(xs))
+                            response = {"ok": True, "result": result}
+                        else:
+                            response = {"ok": False, "error": "unknown operation"}
+                        conn.sendall((json.dumps(response) + "\n").encode("utf-8"))
+                    except Exception as e:
+                        response = {"ok": False, "error": str(e)}
+                        conn.sendall((json.dumps(response) + "\n").encode("utf-8"))
+
+        # Your code here
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.bind((host, port))
+            s.listen()
+            print(f"[rpc] server listening on {host}:{port}")
+            while True:
+                conn, addr = s.accept()
+                print(f"[rpc] client {addr} connected")
+                thread = threading.Thread(target=handle_client, args=(conn, addr))
+                thread.daemon = True
+                thread.start()
 
 # ---------- CLI ----------
 
