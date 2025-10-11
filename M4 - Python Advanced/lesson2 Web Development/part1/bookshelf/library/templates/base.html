@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>BookShelf</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'library/styles.css' %}">
+  </head>
+  <body>
+    <header>
+      <h1><a href="{% url 'book_list' %}">BookShelf</a></h1>
+      <nav>
+        {% if user.is_authenticated %}
+          <span>Hello, {{ user.username }}!</span>
+          <a href="{% url 'book_create' %}">Add Book</a>
+          <form action="{% url 'logout' %}" method="post" style="display:inline">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+          </form>
+        {% else %}
+          <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+      </nav>
+    </header>
+    {% for message in messages %}
+      <p class="message {{ message.tags }}">{{ message }}</p>
+    {% endfor %}
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+  </body>
+</html>

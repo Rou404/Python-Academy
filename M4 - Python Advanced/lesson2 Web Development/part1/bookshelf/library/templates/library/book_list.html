@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+  <form method="get">
+    <input name="q" placeholder="Search title…" value="{{ request.GET.q }}">
+    <select name="status">
+      <option value="">All</option>
+      <option value="to_read">To Read</option>
+      <option value="reading">Reading</option>
+      <option value="read">Read</option>
+    </select>
+    <button>Filter</button>
+  </form>
+  <ul>
+    {% for book in object_list %}
+      <li>
+        <a href="{% url 'book_detail' book.pk %}">{{ book.title }}</a>
+        by {{ book.author }} — <em>{{ book.get_status_display }}</em>
+      </li>
+    {% empty %}
+      <li>No books yet. <a href="{% url 'book_create' %}">Add one</a>.</li>
+    {% endfor %}
+  </ul>
+  {% if is_paginated %}
+    <div class="pager">
+      {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}">Prev</a>{% endif %}
+      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+      {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}">Next</a>{% endif %}
+    </div>
+  {% endif %}
+{% endblock %}
