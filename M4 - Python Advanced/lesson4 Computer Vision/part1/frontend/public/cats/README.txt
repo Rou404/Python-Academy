@@ -1,0 +1,1 @@
+Place emotion-specific cat images here (happy.jpg, sad.jpg, angry.jpg, neutral.jpg).
