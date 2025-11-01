@@ -240,13 +240,19 @@ class VisionMonitor:
                     2,
                     cv2.LINE_AA,
                 )
+                if expression_label == "happy":
+                    expr_color = (255, 215, 0)
+                elif expression_label == "shocked":
+                    expr_color = (102, 204, 255)
+                else:
+                    expr_color = (200, 200, 200)
                 cv2.putText(
                     overlay,
                     f"Expression: {expression_label.upper()}",
                     (16, 78),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     0.8,
-                    (255, 215, 0) if expression_label == "happy" else (200, 200, 200),
+                    expr_color,
                     2,
                     cv2.LINE_AA,
                 )
@@ -296,7 +302,7 @@ class VisionMonitor:
                 self._round_event.set()
 
     def _update_expression_stats(self, expression_label: str) -> None:
-        clean_label = expression_label if expression_label in {"happy", "sad", "angry", "neutral"} else None
+        clean_label = expression_label if expression_label in {"happy", "sad", "angry", "neutral", "shocked"} else None
         with self._expression_lock:
             if not self._expression_active:
                 return

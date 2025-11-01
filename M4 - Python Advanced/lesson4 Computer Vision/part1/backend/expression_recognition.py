@@ -73,19 +73,34 @@ def _classify_expression(metrics: Dict[str, float]) -> str:
     def _positive(value: float) -> float:
         return value if value > 0.0 else 0.0
 
-    happy_score = _positive(smile - 0.47) * 2.3 + _positive(mouth_open - 0.028) * 1.6
-    angry_score = _positive(0.56 - brow_furrow) * 2.6 + _positive(0.02 - lip_curl) * 4.2
-    sad_score = _positive(lip_curl - 0.007) * 4.5 + _positive(0.05 - mouth_open) * 2.2
+    happy_score = _positive(smile - 0.50) * 1.6 + _positive(mouth_open - 0.035) * 1.2
+    angry_score = (
+        _positive(0.58 - brow_furrow) * 2.6
+        + _positive(0.015 - lip_curl) * 3.0
+        + _positive(0.030 - mouth_open) * 1.5
+        + _positive(0.48 - smile) * 0.9
+    )
+    sad_score = (
+        _positive(lip_curl - 0.010) * 3.8
+        + _positive(0.055 - mouth_open) * 2.1
+        + _positive(0.47 - smile) * 1.0
+    )
+    shocked_score = (
+        _positive(mouth_open - 0.070) * 3.4
+        + _positive(0.49 - smile) * 1.2
+        + _positive(0.60 - brow_furrow) * 0.7
+    )
 
     scores = {
         "happy": happy_score,
         "angry": angry_score,
         "sad": sad_score,
-        "neutral": 0.12,
+        "shocked": shocked_score,
+        "neutral": 0.20,
     }
 
     label = max(scores, key=scores.get)
-    if scores[label] < 0.18:
+    if scores[label] < 0.24:
         return "neutral"
     return label
 

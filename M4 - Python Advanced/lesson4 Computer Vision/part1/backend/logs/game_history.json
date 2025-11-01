@@ -268,5 +268,59 @@
     "final_expression": "neutral",
     "cat_image": "/cats/neutral.jpg",
     "duration_seconds": 103.615615
+  },
+  {
+    "session_id": "de71c1e2-b3ed-4533-aa2d-8cb4831654b7",
+    "player_name": null,
+    "played_at": "2025-11-01T06:58:24.510581",
+    "rounds": [
+      {
+        "round_number": 1,
+        "player_move": "paper",
+        "bot_move": "scissors",
+        "outcome": "bot",
+        "stats": {
+          "rock": 0,
+          "paper": 1,
+          "scissors": 0,
+          "samples": 76
+        },
+        "captured_at": "2025-11-01T06:58:35.869613"
+      },
+      {
+        "round_number": 2,
+        "player_move": "scissors",
+        "bot_move": "paper",
+        "outcome": "player",
+        "stats": {
+          "rock": 0,
+          "paper": 0,
+          "scissors": 33,
+          "samples": 73
+        },
+        "captured_at": "2025-11-01T06:58:52.988711"
+      },
+      {
+        "round_number": 3,
+        "player_move": "rock",
+        "bot_move": "rock",
+        "outcome": "draw",
+        "stats": {
+          "rock": 31,
+          "paper": 0,
+          "scissors": 0,
+          "samples": 74
+        },
+        "captured_at": "2025-11-01T06:59:05.359716"
+      }
+    ],
+    "scoreboard": {
+      "player": 1,
+      "bot": 1,
+      "draws": 1
+    },
+    "final_expression": "shocked",
+    "cat_image": "/cats/shocked.jpg",
+    "duration_seconds": 48.551849
   }
 ]
