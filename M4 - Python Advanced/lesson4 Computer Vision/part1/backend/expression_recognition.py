@@ -63,23 +63,31 @@ def _compute_metrics(landmarks) -> Dict[str, float]:
 
 
 def _classify_expression(metrics: Dict[str, float]) -> str:
-    """Map our heuristic metrics to a coarse emotion label."""
+    """Map facial metrics to a coarse emotion label using soft scores."""
 
     smile = metrics["smile"]
     mouth_open = metrics["mouth_open"]
     brow_furrow = metrics["brow_furrow"]
     lip_curl = metrics["lip_curl"]
 
-    if smile > 0.52 and mouth_open > 0.04:
-        return "happy"
+    def _positive(value: float) -> float:
+        return value if value > 0.0 else 0.0
 
-    if brow_furrow < 0.42 and mouth_open < 0.035:
-        return "angry"
+    happy_score = _positive(smile - 0.47) * 2.3 + _positive(mouth_open - 0.028) * 1.6
+    angry_score = _positive(0.56 - brow_furrow) * 2.6 + _positive(0.02 - lip_curl) * 4.2
+    sad_score = _positive(lip_curl - 0.007) * 4.5 + _positive(0.05 - mouth_open) * 2.2
 
-    if lip_curl > 0.02 and mouth_open < 0.045:
-        return "sad"
+    scores = {
+        "happy": happy_score,
+        "angry": angry_score,
+        "sad": sad_score,
+        "neutral": 0.12,
+    }
 
-    return "neutral"
+    label = max(scores, key=scores.get)
+    if scores[label] < 0.18:
+        return "neutral"
+    return label
 
 
 def classify_expression_from_landmarks(landmarks) -> Tuple[str, Dict[str, float]]:

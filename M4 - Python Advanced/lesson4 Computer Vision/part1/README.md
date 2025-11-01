@@ -89,7 +89,8 @@ When the backend responds with the dominant expression, the UI swaps in the resp
    - FastAPI returns frame counts so students can see how many samples influenced the vote.
 3. **Three rounds vs. bot** - Bot picks randomly; scoreboard updates live.
 4. **Capture expression** - The same monitor aggregates face metrics over 4 seconds before locking the final label.
-   - Heuristics map those metrics to *happy*, *sad*, *angry*, or *neutral*, and the React app swaps in your cat photo while still showing the live expression label.
+   - Heuristics map those metrics to *happy*, *sad*, *angry*, or *neutral*, and the preview card swaps to your chosen cat photo so the class sees the reaction instantly.
+   - Weighted scores in `expression_recognition.py` make sad/angry easier to hit; tweak the thresholds if you need to calibrate for your lighting or camera.
    - Result is stored with the session and surfaced in the React UI alongside your curated cat photo.
 5. **Review logs** - Both the backend JSON log and on-screen table show the full history for discussion about persistence.
 

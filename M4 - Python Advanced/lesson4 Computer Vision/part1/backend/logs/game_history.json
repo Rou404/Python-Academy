@@ -160,5 +160,113 @@
     "final_expression": "happy",
     "cat_image": "/cats/happy.jpg",
     "duration_seconds": 76.376856
+  },
+  {
+    "session_id": "cb3d6fe4-5f86-4979-bded-3bc3ffa202b2",
+    "player_name": "Casi",
+    "played_at": "2025-11-01T06:41:50.259740",
+    "rounds": [
+      {
+        "round_number": 1,
+        "player_move": "scissors",
+        "bot_move": "rock",
+        "outcome": "bot",
+        "stats": {
+          "rock": 0,
+          "paper": 1,
+          "scissors": 39,
+          "samples": 73
+        },
+        "captured_at": "2025-11-01T06:42:11.782971"
+      },
+      {
+        "round_number": 2,
+        "player_move": "paper",
+        "bot_move": "scissors",
+        "outcome": "bot",
+        "stats": {
+          "rock": 0,
+          "paper": 13,
+          "scissors": 0,
+          "samples": 75
+        },
+        "captured_at": "2025-11-01T06:42:26.967213"
+      },
+      {
+        "round_number": 3,
+        "player_move": "rock",
+        "bot_move": "scissors",
+        "outcome": "player",
+        "stats": {
+          "rock": 22,
+          "paper": 0,
+          "scissors": 0,
+          "samples": 76
+        },
+        "captured_at": "2025-11-01T06:42:43.107369"
+      }
+    ],
+    "scoreboard": {
+      "player": 1,
+      "bot": 2,
+      "draws": 0
+    },
+    "final_expression": "neutral",
+    "cat_image": "/cats/neutral.jpg",
+    "duration_seconds": 65.415771
+  },
+  {
+    "session_id": "ea6249ab-455f-443c-802c-4e40d0c4c0e6",
+    "player_name": "Casi",
+    "played_at": "2025-11-01T06:43:01.842979",
+    "rounds": [
+      {
+        "round_number": 1,
+        "player_move": "paper",
+        "bot_move": "rock",
+        "outcome": "player",
+        "stats": {
+          "rock": 0,
+          "paper": 13,
+          "scissors": 0,
+          "samples": 76
+        },
+        "captured_at": "2025-11-01T06:43:15.650753"
+      },
+      {
+        "round_number": 2,
+        "player_move": "scissors",
+        "bot_move": "scissors",
+        "outcome": "draw",
+        "stats": {
+          "rock": 0,
+          "paper": 0,
+          "scissors": 40,
+          "samples": 73
+        },
+        "captured_at": "2025-11-01T06:43:30.206113"
+      },
+      {
+        "round_number": 3,
+        "player_move": "rock",
+        "bot_move": "rock",
+        "outcome": "draw",
+        "stats": {
+          "rock": 75,
+          "paper": 0,
+          "scissors": 0,
+          "samples": 75
+        },
+        "captured_at": "2025-11-01T06:43:42.994979"
+      }
+    ],
+    "scoreboard": {
+      "player": 1,
+      "bot": 0,
+      "draws": 2
+    },
+    "final_expression": "neutral",
+    "cat_image": "/cats/neutral.jpg",
+    "duration_seconds": 103.615615
   }
 ]

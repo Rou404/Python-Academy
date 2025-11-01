@@ -32,6 +32,7 @@ export default function App() {
     expression_label: 'neutral',
     timestamp: null,
   });
+  const showCatResult = Boolean(expressionResult?.cat_image_url);
 
   useEffect(() => {
     refreshLogs();
@@ -92,6 +93,11 @@ export default function App() {
       setMessage('Session started. Play round when ready.');
       setCameraReminder(false);
       setHandStreamUrl(`${API_BASE_URL}/api/preview/stream?${Date.now()}`);
+      setPreviewStatus({
+        gesture_label: 'searching',
+        expression_label: 'neutral',
+        timestamp: null,
+      });
     } catch (error) {
       setMessage(error.message);
     } finally {
@@ -157,6 +163,12 @@ export default function App() {
     try {
       const result = await captureExpression(sessionId);
       setExpressionResult(result);
+      setHandStreamUrl(null);
+      setPreviewStatus((prev) => ({
+        ...prev,
+        gesture_label: 'locked',
+        expression_label: result.expression,
+      }));
       setStatus('completed');
       setMessage(`Expression captured: ${result.expression}. Enjoy your cat!`);
       await refreshLogs();
@@ -214,21 +226,43 @@ export default function App() {
 
         <div className="preview-card">
           <div className="preview-header">
-            <span className="small-text">Live camera preview (MediaPipe overlays on server)</span>
-            <span className="small-text">Labels update in real time while you move.</span>
+            <span className="small-text">
+              {showCatResult ? 'Your victory cat (expression result)' : 'Live camera preview (MediaPipe overlays on server)'}
+            </span>
+            <span className="small-text">
+              {showCatResult
+                ? 'Restart a session to re-enable the live stream.'
+                : 'Labels update in real time while you move.'}
+            </span>
           </div>
           <div className="preview-frame">
-            {handStreamUrl ? (
+            {showCatResult ? (
+              <img
+                className="preview-cat"
+                src={expressionResult?.cat_image_url}
+                alt={`${expressionResult?.expression ?? 'reaction'} cat`}
+              />
+            ) : handStreamUrl ? (
               <img src={handStreamUrl} alt="Live hand tracking" />
             ) : (
               <div className="small-text">Camera preview unavailable.</div>
             )}
           </div>
           <div className="preview-metrics">
-            <span className="tag">Gesture: {previewStatus.gesture_label ?? 'searching'}</span>
-            <span className="tag">Expression: {previewStatus.expression_label ?? 'neutral'}</span>
+            <span className="tag">
+              {showCatResult
+                ? `Final expression: ${expressionResult?.expression ?? 'neutral'}`
+                : `Gesture: ${previewStatus.gesture_label ?? 'searching'}`}
+            </span>
+            <span className="tag">
+              {showCatResult
+                ? 'Cat reaction ready'
+                : `Expression: ${previewStatus.expression_label ?? 'neutral'}`}
+            </span>
           </div>
-          {previewStatus.error && <div className="small-text">{previewStatus.error}</div>}
+          {!showCatResult && previewStatus.error && (
+            <div className="small-text">{previewStatus.error}</div>
+          )}
         </div>
 
         <div style={{ marginTop: '1rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
@@ -261,19 +295,6 @@ export default function App() {
             />
           ))}
         </div>
-        {expressionResult && (
-          <div className="cat-preview">
-            <div className="tag">Final expression: {expressionResult.expression}</div>
-            <img
-              src={expressionResult.cat_image_url}
-              alt={`${expressionResult.expression} cat`}
-              onError={(event) => {
-                event.currentTarget.style.display = 'none';
-              }}
-            />
-            <div className="small-text">Place your cat photo under public/cats/{'{'}emotion{'}'}.jpg</div>
-          </div>
-        )}
       </div>
 
       <SessionLog sessions={logs} onRefresh={refreshLogs} />

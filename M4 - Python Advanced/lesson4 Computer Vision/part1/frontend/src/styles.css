@@ -167,3 +167,9 @@ h1 {
   gap: 0.5rem;
   margin-top: 0.75rem;
 }
+
+.preview-frame img.preview-cat {
+  object-fit: contain;
+  background: rgba(15, 23, 42, 0.85);
+  padding: 0.6rem;
+}
