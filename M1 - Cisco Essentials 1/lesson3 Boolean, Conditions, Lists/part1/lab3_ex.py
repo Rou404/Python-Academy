@@ -106,3 +106,48 @@ Programul trebuie să actualizeze soldul în funcție de acțiuni.
 Programul trebuie să verifice erorile (ex.: nu poți retrage mai mult decât ai) si sa afiseze un mesaj pentru fiecare operatie
 
 '''
+
+sold=1000
+pin=1234
+incercari=2
+auth=False
+upin=int(input('introdu pin: '))
+while incercari:
+    if upin==pin:
+        auth=True
+        break
+    else:
+        print('pin gresit')
+        upin=int(input('introdu pin: '))
+        incercari=incercari-1
+ 
+if auth==False:
+    print('Nu mai ai incercari')
+ 
+ 
+ 
+while auth:
+    actiune=int(input('''Alege o actiune:
+                      1-Depunere
+                      2-Retragere
+                      3-Afisare sold
+                      4-Iesire in program
+                       '''))
+    if actiune==1:
+        suma=int(input('Introdu suma pe care vrei sa o depui: '))
+        sold=sold+suma
+        print(f'Sold: {sold} lei')
+    if actiune==2:
+        suma=int(input('Introdu suma pe care vrei sa o retragi: '))
+        if suma>sold:
+            print('Nu ai destui bani')
+        else:
+            sold=sold-suma
+            print(f"Sold: {sold} lei")
+ 
+    if actiune==3:
+        print(sold)
+    if actiune==4:
+        print('O zi buna!')
+        break
+
