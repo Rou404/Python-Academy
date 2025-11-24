@@ -96,24 +96,113 @@ print(matrice)
 print(matrice[1][2])   # Access element 6
 
 '''
-Se citeste de la tastatura lungimea unei liste n, iar ulterior se citesc n numere care se adauga in lista, pentru fiecare element din lista, arata patratul lui 
+Se citeste de la tastatura lungimea unei liste n,
+iar ulterior se citesc n numere pozitive si negative care se adauga in lista,
+modifica lista pentru a contine doar elemente pozitive si aratati lista pe ecran 
 '''
 
 
+n = int(input("Introdu lungimea listei: "))
+lista = []
 
+for x in range(n):
+    numar = int(input("Introdu un numar: "))
+    lista.append(numar * numar)
+
+print(lista)
 
 
 
 
 '''
 Se citeste de la tastatura lungimea unei liste n,
-iar ulterior se citesc n numere care se adauga in lista,
-pentru fiecare element din lista, arata patratul lui 
+iar ulterior se citesc n numere pozitive si negative care se adauga in lista,
+sa se creeze o copie de lista care contine doar elementele pozitive si aratati lista pe ecran 
 '''
+ 
+
+n = int(input("Introdu lungimea listei: "))
+lista = []
+
+for x in range(n):
+    numar = int(input("Introdu un numar: "))
+    lista.append(numar)
+
+lista_copie_pozitiva = [x for x in lista if x >= 0]
+print(lista_copie_pozitiva)
 
 
+"""
+Scrie un program care lucrează cu o listă de numere întregi. Programul trebuie să citească de la tastatură un număr necunoscut de valori, până când utilizatorul introduce cuvântul „stop”.
+Dacă utilizatorul introduce altceva decât un număr întreg (inclusiv valori invalide), programul trebuie să afișeze un mesaj de eroare și să ceară din nou inputul, fără să îl adauge în listă.
+
+După ce utilizatorul introduce „stop”, programul trebuie să afișeze următoarele informații despre lista obținută:
 
 
+lista completă
+valoarea minimă
+valoarea maximă
+media aritmetică a numerelor
+suma numerelor
+produsul numerelor
+lista numerelor pare
+lista numerelor impare
+câte numere pozitive, negative și zero există
+lista sortată crescător
+lista sortată descrescător
+lista fără duplicate (păstrând ordinea)
+o listă nouă care conține pătratul fiecărui număr
+o listă în care sunt eliminate toate numerele negative
+"""
 
+lista = []
 
+while True:
+    x = input("Introdu un numar ('stop' pentru a opri): ")
 
+    if x.lower() == "stop":
+        break
+
+    if not x.lstrip("-").isdigit():
+        print("Te rog introdu doar numere!")
+        continue
+
+    lista.append(int(x))
+
+print("Lista:", lista)
+print("Min:", min(lista))
+print("Max:", max(lista))
+print("Media:", sum(lista) / len(lista))
+print("Suma:", sum(lista))
+
+prod = 1
+for n in lista:
+    prod *= n
+print("Produsul:", prod)
+
+pare = [n for n in lista if n % 2 == 0]
+impare = [n for n in lista if n % 2 != 0]
+
+pozitive = len([n for n in lista if n > 0])
+negative = len([n for n in lista if n < 0])
+zerouri = lista.count(0)
+
+print("Pare:", pare)
+print("Impare:", impare)
+print("Pozitive:", pozitive)
+print("Negative:", negative)
+print("Zero:", zerouri)
+print("Sortata crescator:", sorted(lista))
+print("Sortata descrescator:", sorted(lista, reverse=True))
+
+fara_duplicate = []
+for n in lista:
+    if n not in fara_duplicate:
+        fara_duplicate.append(n)
+print("Fara duplicate:", fara_duplicate)
+
+patrate = [n*n for n in lista]
+print("Patrate:", patrate)
+
+pozitive_only = [n for n in lista if n >= 0]
+print("Fara negative:", pozitive_only)
